@@ -1,0 +1,21 @@
+{
+  "id": "metadata_server",
+  "name": "metadata_server",
+  "chef_environment": "_default",
+  "json_class": "Chef::Node",
+  "automatic": {
+    "hostname": "metadata_server",
+    "os": "ubuntu"
+  },
+  "normal": {
+  },
+  "chef_type": "node",
+  "default": {
+	 "ipaddress": "33.33.33.10"
+  },
+  "override": {
+  },
+  "run_list": [
+    "recipe[xtreemfs::mrc]"
+  ]
+}

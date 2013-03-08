@@ -1,0 +1,5 @@
+- Support multiple dir services
+- Support multiple mrc services
+- Support multiple osd per node
+- Provider for Volumes (with options)
+- listen address configurable
