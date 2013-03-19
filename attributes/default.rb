@@ -11,6 +11,9 @@ default[:xtreemfs][:mrc][:dir_service_host] = "localhost"
 default[:xtreemfs][:osd][:count] = 1
 default[:xtreemfs][:osd][:first_listen_port] = 32640
 default[:xtreemfs][:osd][:first_http_port] = 30640
+default[:xtreemfs][:osd][:bind_ip] = node[:ipaddress]
+default[:xtreemfs][:mrc][:bind_ip] = node[:ipaddress]
+default[:xtreemfs][:dir][:bind_ip] = node[:ipaddress]
 
 # We don't want to get to fancy with configuration so we use the following convention:
 # "object_base_directory" is configured here and the OSD dirs will be based on the OSD number

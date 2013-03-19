@@ -16,7 +16,7 @@ template "/etc/xos/xtreemfs/osdconfig.#{osd_number}.properties" do
      :listen_port => (node[:xtreemfs][:osd][:first_listen_port] + osd_number),
      :http_port => (node[:xtreemfs][:osd][:first_http_port] + osd_number),
      :uuid => node[:xtreemfs][:osd][osd_id.to_sym],
-     :listen_address => node[:ipaddress]
+     :listen_address => node[:xtreemfs][:osd][:ip]
   })
 end
 

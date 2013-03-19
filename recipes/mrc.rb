@@ -12,7 +12,8 @@ template "/etc/xos/xtreemfs/mrcconfig.properties" do
   group node[:xtreemfs][:group]
   variables({
      :dir_service_host => dir_service_host,
-     :uuid => node[:xtreemfs][:mrc][:uuid]
+     :uuid => node[:xtreemfs][:mrc][:uuid],
+     :ip_address => node[:xtreemfs][:mrc][:bind_ip]
   })
 end
 
