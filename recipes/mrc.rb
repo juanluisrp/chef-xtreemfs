@@ -1,9 +1,15 @@
 package "xtreemfs-server"
 
-node[:xtreemfs][:mrc][:uuid] ||= `uuidgen -r`
+if node[:xtreemfs][:mrc][:uuid].nil?
+  node.set[:xtreemfs][:mrc][:uuid] = `uuidgen`
+end
 
 # TODO: Support multiple dir_services
-dir_service_host = search(:node, 'role:xtreemfs*').map {|n| n['ipaddress']}.first
+if Chef::Config[:solo]
+  dir_service_host = node[:xtreemfs][:dir][:bind_ip]
+else
+  dir_service_host = search(:node, 'role:xtreemfs*').map {|n| n['ipaddress']}.first
+end
 
 template "/etc/xos/xtreemfs/mrcconfig.properties" do
   source "mrcconfig.properties.erb"

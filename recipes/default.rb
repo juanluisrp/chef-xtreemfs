@@ -7,6 +7,8 @@
 # All rights reserved - Do Not Redistribute
 #
 
+include_recipe "apt"
+
 key_id = "2FA7E736"
 
 bash "install xtreemfs key" do
