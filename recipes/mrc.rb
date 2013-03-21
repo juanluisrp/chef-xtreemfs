@@ -26,3 +26,5 @@ end
 service "xtreemfs-mrc" do
   action [ :enable, :start ]
 end
+
+node.set[:xtreemfs][:mrc][:service] = true

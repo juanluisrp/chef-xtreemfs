@@ -4,7 +4,7 @@ package "xtreemfs-server"
 if Chef::Config[:solo]
   dir_service_host = node[:xtreemfs][:dir][:bind_ip]
 else
-  dir_service_host = search(:node, 'role:xtreemfs*').map {|n| n['ipaddress']}.first
+  dir_service_host = search(:node, 'xtreemfs_dir_service:true').map {|n| n[:xtreemfs][:dir][:bind_ip]}.first
 end
 
 0.upto(node[:xtreemfs][:osd][:count]) do |osd_number|
