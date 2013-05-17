@@ -34,3 +34,12 @@ default[:xtreemfs][:osd][:bind_ip] = node[:ipaddress]
 # mounted in these directories with one OSD
 default[:xtreemfs][:osd][:object_base_directory] = "/var/lib/xtreemfs/objs/"
 
+# client convenience
+default[:xtreemfs][:client][:volumes] = []
+default[:xtreemfs][:client][:mounts] = [{}]
+# for example  = [
+#   {
+#     :mnt => '/xtreemfs',
+#     :volume => 'filestore'
+#   }
+# ]
