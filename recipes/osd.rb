@@ -1,3 +1,5 @@
+include_recipe "xtreemfs::default"
+
 package "xtreemfs-server"
 
 # TODO: Support multiple dir_services

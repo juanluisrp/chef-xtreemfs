@@ -1,3 +1,5 @@
+include_recipe "xtreemfs::default"
+
 package "xtreemfs-server"
 
 if node[:xtreemfs][:mrc][:uuid].nil?

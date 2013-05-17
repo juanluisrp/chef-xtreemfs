@@ -1,3 +1,5 @@
+include_recipe "xtreemfs::default"
+
 package "xtreemfs-server"
 
 service "xtreemfs-dir" do
