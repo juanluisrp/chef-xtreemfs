@@ -22,6 +22,30 @@ Thus, with `node[:xtreemfs][:osd][:object_base_directory] = "/var/lib/xtreemfs/o
 ...
 ```
 
+The `xtreemfs::client` recipe loops over the `node[:xtreemfs][:client][:volumes]` (and those mentioned in `node[:xtreemfs][:client][:mounts]`) volume list and ensures they are created on the (first) MRC host it finds.
+If the `node[:xtreemfs][:client][:mounts]` array of hashes is set, e.g.
+
+```ruby
+set[:xtreemfs][:client][:mounts] = [
+  {
+    :volume => 'myVolume',
+    :mount => '/mnt'
+  }
+]
+```
+it will mount the volumes in the respective places.
+
+Furthermore, using the monkeypatch (adapted from [CHEF-3639](http://tickets.opscode.com/browse/CHEF-3739)) in `libraries/mount.rb`, it allows for mounting xtreemfs volumes using the mount resource, e.g.
+
+```ruby
+mount "/mnt" do
+  device "#{dir_service_host}/myVol"
+  options "rw,nosuid,nodev,noatime,allow_other,default_permissions"
+  fstype 'xtreemfs'
+  action [:enable, :mount]
+end
+```
+
 # Attributes
 
 - `node[:xtreemfs][:user]` - the user to run the xtreemfs services ("xtreemfs")
