@@ -29,7 +29,7 @@ end
 if Chef::Config[:solo]
   dir_service_host = node[:xtreemfs][:dir][:bind_ip]
 else
-  dir_service_host = search(:node, 'xtreemfs_dir_service:true').map {|n| n[:xtreemfs][:dir][:bind_ip]}.first
+  dir_service_host = search(:node, node[:xtreemfs][:dir][:query]).map {|n| n[:xtreemfs][:dir][:bind_ip]}.first
 end
 
 template "/etc/xos/xtreemfs/mrcconfig.properties" do
