@@ -30,7 +30,7 @@ Thus, with `node[:xtreemfs][:osd][:object_base_directory] = "/var/lib/xtreemfs/o
 - `node[:xtreemfs][:osd][:count]` - the number of OSD instances on the host (1)
 - `node[:xtreemfs][:osd][:first_listen_port]` defaults to 32640
 - `node[:xtreemfs][:osd][:first_http_port]` defaults to 30640
-- `node[:xtreemfs][:osd][:bind_ip]`, `node[:xtreemfs][:mrc][:bind_ip]`, `node[:xtreemfs][:dir][:bind_ip]` defaulting to `node[:ipaddress]`
+- `node[:xtreemfs][:osd][:bind_ip]`, `node[:xtreemfs][:mrc][:bind_ip]`, `node[:xtreemfs][:dir][:bind_ip]` default to `node[:ipaddress]`
 - `node[:xtreemfs][:osd][:object_base_directory]` - the directory where objects will be stored ("/var/lib/xtreemfs/objs/")
 
 # Recipes
