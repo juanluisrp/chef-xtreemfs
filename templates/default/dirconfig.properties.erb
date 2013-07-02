@@ -7,6 +7,7 @@
 # 5: notice
 # 6: info (default)
 # 7: debug
+#debug.level = 6
 debug.level = <%= @debug_level %>
 
 # optional debug categories - a space or comma-separated list of log message categories
@@ -28,38 +29,14 @@ listen.port = <%= @listen_port %>
 # port for the status page (HTTP server)
 http_port = <%= @http_port %>
 
-# optional address for network device, "any" if not specified
+# optional address for network device ("any" if not specified)
 # listen.address = 127.0.0.1
-
-# optinal host name that is used to register the service at the DIR
-# hostname = foo.bar.com
-
-hostname = <%= @ip_address %>
-
-# interval for querying the Directory Service for new OSDs (in s)
-osd_check_interval = 10
-
-# Directory Service endpoints
-<% i = 0 -%>
-<% @dir_service_hosts.each do |host, port| -%>
-dir_service<%= i > 0 ? i : "" %>.host = <%= host %>
-dir_service<%= i > 0 ? i : "" %>.port = <%= port %>
-<% i+=1; end -%>
-
-# specify whether access time stamps are updated
-no_atime = true
-
-# granularity of the local clock (in ms) (0 disables it to always use the current system time)
-local_clock_renewal = 0
-
-# interval between two remote clock syncs (in ms)
-remote_time_sync = 60000
 
 # specify whether SSL is required
 ssl.enabled = false
 
 # server credentials for SSL handshakes
-ssl.service_creds = /etc/xos/xtreemfs/truststore/certs/mrc.p12
+ssl.service_creds = /etc/xos/xtreemfs/truststore/certs/ds.p12
 ssl.service_creds.pw = passphrase
 ssl.service_creds.container = pkcs12
 #ssl.trust_manager = org.xtreemfs.auth.plugin.SSLX509TrustManager
@@ -73,39 +50,30 @@ ssl.trusted_certs.container = jks
 # and sends all data via an unencrypted TCP connection. 
 #ssl.grid_ssl = false
 
-# Authentication providers are used to retrieve the user identities
-# from the client or from certificate.
-# The default provider is org.xtreemfs.common.auth.NullAuthProvider, which just
-# takes the information provided by the client. The name of a pluggable
-# provider can be used here.
-authentication_provider = org.xtreemfs.common.auth.NullAuthProvider
+# time to wait for the directory service to become available on start-up
+# before aborting
+#startup.wait_for_dir = 30
+
+# administrator password for privileged operations
+#admin_password = passphrase
 
 # Optional directory containing deployable policy implementations.
 # Policies can be directly deployed as .java or .class files in this directory
 # or one of its subdirectories. They will be compiled at startup time and
 # loaded at runtime. Policies may have external dependencies that can be
 # deployed either as .java, .class or .jar files. While Java and Class files
-# may be located in subdirectories, JAR files mustn't. So far, pluggable
-# policies have to inherit from either org.xtreemfs.mrc.ac.FileAccessPolicy,
-# org.xtreemfs.mrc.osdstatus.OSDSelectionPolicy,
-# org.xtreemfs.common.auth.AuthenticationProvider, or javax.ssl.TrustManager.
-# Policies identified by policy IDs (OSDSelectionPolicy and FileAccessPolicy)
-# require a public static long field called POLICY_ID that assigns the policy
-# a unique number.
+# may be located in subdirectories, JAR files mustn't.
 policy_dir = /etc/xos/xtreemfs/policies
 
-# Shared secret between the MRC and all OSDs.
-# The secret is used by the MRC to sign capabilities, i.e. security tokens for
-# data access at OSDs. In turn, an OSD uses the secret to verify that the
-# capability has been issued by the MRC. The shared secret will be replaced by
-# a public key infrastructure in future releases.
-capability_secret = secretPassphrase
+#monitoring = true
 
-# validity time span for capabilities in seconds
-#capability_timeout = 600
+#monitoring.email.program = /usr/sbin/sendmail
 
-# administrator password for privileged operations
-#admin_password = passphrase
+#monitoring.email.sender = XtreemFS DIR
+
+#monitoring.email.receiver = 
+
+#monitoring.max_warnings = 1
 
 # If you want to monitor your XtreemFS installation through SNMP 
 # uncomment the following lines. You have to set snmp.enabled = true
@@ -114,11 +82,11 @@ capability_secret = secretPassphrase
 # monitoring information via SNMP.
 #snmp.enabled = true
 #snmp.address = localhost
-#snmp.port = 34636
+#snmp.port = 34638
 #snmp.aclfile = /etc/xos/xtreemfs/snmp.acl
 
 #####################################################################
-# BabuDB configuration												#
+# BabuDB configuration                                              #
 #####################################################################
 
 # optional debug level (
@@ -139,20 +107,20 @@ babudb.debug.level = <%= @babudb_debug_level %>
 #babudb.cfgFile = config.db
 
 # base directory to store database index snapshots in
-babudb.baseDir = /var/lib/xtreemfs/mrc/database
+babudb.baseDir = /var/lib/xtreemfs/dir/database
 
 # directory in which the database logs are stored
-babudb.logDir = /var/lib/xtreemfs/mrc/db-log
+babudb.logDir = /var/lib/xtreemfs/dir/db-log
 
 # SyncMode the synchronization mode to use for the logFile
 # ASYNC - asynchronously write log entries (data is lost when system crashes).
 # FSYNC - executes an fsync on the logfile before acknowledging the operation.
 # FDATASYNC
 # SYNC_WRITE - synchronously writes the log entry to disk before ack. Does not
-#			   update the metadata.
+#              update the metadata.
 # SYNC_WRITE_METADATA - synchronously writes the log entry to disk and updates
-#			   			the metadata before ack.
-babudb.sync = <%= @babudb_sync %>
+#                       the metadata before ack.
+babudb.sync = FDATASYNC
 
 # max queue length: if > 0, the queue for each worker is limited to maxQ
 babudb.worker.maxQueueLength = 250
@@ -170,7 +138,7 @@ babudb.checkInterval = 300
 # they are written to the disk log. The disk logger will do batch writes
 # and call fSync... every pseudoSyncWait seconds. This can be used to
 # increase performance and emulate PostgreSQL behavior.
-babudb.pseudoSyncWait = 0
+babudb.pseudoSyncWait = 200
 
 # flag that determines whether the indices shall be compressed or not.
 #babudb.compression = false
@@ -181,15 +149,11 @@ babudb.pseudoSyncWait = 0
 # maximum size for a babudb on-disk index file
 #babudb.maxBlockFileSize = 52428800
 
-# Uncomment this line if you want to enable the MRC replication. The path points
+# Uncomment this line if you want to enable the DIR replication. The path points
 # to the database replication configuration. Place here the hostnames of all replicas.
-#
-# Please note, if you replicate the MRC you have to change the option
-# "babudb.sync" in this file from ASYNC to a synchronous one e.g., FDATASYNC.
 <% if @replication -%>
-babudb.plugin.0 = /etc/xos/xtreemfs/server-repl-plugin/mrc.properties
+babudb.plugin.0 = /etc/xos/xtreemfs/server-repl-plugin/dir.properties
 <% end -%>
-
 
 # The UUID is the globally unique name of this service.
 # You must not change the UUID once the service has been used

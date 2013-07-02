@@ -21,12 +21,7 @@ include_recipe "xtreemfs::default"
 
 package "xtreemfs-server"
 
-# TODO: Support multiple dir_services
-if Chef::Config[:solo]
-  dir_service_host = node[:xtreemfs][:dir][:bind_ip]
-else
-  dir_service_host = search(:node, 'xtreemfs_dir_service:true').map {|n| n[:xtreemfs][:dir][:bind_ip]}.first
-end
+dir_service_hosts = get_service_hosts('dir')
 
 0.upto(node[:xtreemfs][:osd][:count]) do |osd_number|
   template "/etc/xos/xtreemfs/osdconfig.#{osd_number}.properties" do
@@ -40,7 +35,7 @@ end
     owner node[:xtreemfs][:user]
     group node[:xtreemfs][:group]
     variables({
-      :dir_service_host => dir_service_host,
+      :dir_service_hosts => dir_service_hosts,
       :object_directory => File.join(node[:xtreemfs][:osd][:object_base_directory], osd_number.to_s),
       :listen_port => (node[:xtreemfs][:osd][:first_listen_port] + osd_number),
       :http_port => (node[:xtreemfs][:osd][:first_http_port] + osd_number),

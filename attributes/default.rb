@@ -1,3 +1,4 @@
+default[:xtreemfs][:standalone] = Chef::Config[:solo]
 default[:xtreemfs][:user] = "xtreemfs"
 default[:xtreemfs][:group] = "xtreemfs"
 
@@ -12,8 +13,19 @@ default[:xtreemfs][:osd][:count] = 1
 default[:xtreemfs][:osd][:first_listen_port] = 32640
 default[:xtreemfs][:osd][:first_http_port] = 30640
 default[:xtreemfs][:osd][:bind_ip] = node[:ipaddress]
+
+# MRC defaults
+default[:xtreemfs][:mrc][:replication] = false
 default[:xtreemfs][:mrc][:bind_ip] = node[:ipaddress]
+default[:xtreemfs][:mrc][:listen_port] = 32636
+default[:xtreemfs][:mrc][:http_port] = 30636
+
+# DIR defaults
+default[:xtreemfs][:dir][:replication] = false
 default[:xtreemfs][:dir][:bind_ip] = node[:ipaddress]
+default[:xtreemfs][:dir][:listen_port] = 32638
+default[:xtreemfs][:dir][:http_port] = 30638
+default[:xtreemfs][:dir][:snmp_port] = 34638
 
 # We don't want to get to fancy with configuration so we use the following convention:
 # "object_base_directory" is configured here and the OSD dirs will be based on the OSD number

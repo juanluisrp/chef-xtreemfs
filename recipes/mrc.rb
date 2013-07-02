@@ -25,12 +25,7 @@ if node[:xtreemfs][:mrc][:uuid].nil?
   node.set[:xtreemfs][:mrc][:uuid] = `uuidgen`
 end
 
-# TODO: Support multiple dir_services
-if Chef::Config[:solo]
-  dir_service_host = node[:xtreemfs][:dir][:bind_ip]
-else
-  dir_service_host = search(:node, 'xtreemfs_dir_service:true').map {|n| n[:xtreemfs][:dir][:bind_ip]}.first
-end
+dir_service_hosts = get_service_hosts('dir')
 
 template "/etc/xos/xtreemfs/mrcconfig.properties" do
   source "mrcconfig.properties.erb"
@@ -38,14 +33,40 @@ template "/etc/xos/xtreemfs/mrcconfig.properties" do
   owner node[:xtreemfs][:user]
   group node[:xtreemfs][:group]
   variables({
-     :dir_service_host => dir_service_host,
+     :dir_service_hosts => dir_service_hosts,
      :uuid => node[:xtreemfs][:mrc][:uuid],
-     :ip_address => node[:xtreemfs][:mrc][:bind_ip]
+     :ip_address => node[:xtreemfs][:mrc][:bind_ip],
+     :listen_port => node[:xtreemfs][:mrc][:listen_port],
+     :http_port => node[:xtreemfs][:mrc][:http_port],
+     :debug_level => 4, # 0 .. 7 ~ emergency .. debug
+     :babudb_debug_level => 4,
+     :replication => node[:xtreemfs][:mrc][:replication],
+     :babudb_sync => node[:xtreemfs][:mrc][:replication] ? 'FDATASYNC' : 'ASYNC'
   })
+  notifies :reload, 'service[xtreemfs-mrc]', :delayed
 end
+
+if node[:xtreemfs][:mrc][:replication]
+  mrc_repl_participants = get_service_hosts('mrc')
+
+  template '/etc/xos/xtreemfs/server-repl-plugin/mrc.properties' do
+    source "repl.properties.erb"
+    mode 0440
+    owner node[:xtreemfs][:user]
+    group node[:xtreemfs][:group]
+    variables({
+      :service => 'MRC',
+      :repl_participants => mrc_repl_participants,
+      :babudb_repl_sync_n => (mrc_repl_participants.length/2.0).ceil # TODO do something more clever here
+    })
+    notifies :reload, 'service[xtreemfs-mrc]', :delayed
+  end
+end
+
 
 service "xtreemfs-mrc" do
   action [ :enable, :start ]
 end
 
 node.set[:xtreemfs][:mrc][:service] = true
+node.save
