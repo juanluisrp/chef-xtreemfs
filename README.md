@@ -24,14 +24,18 @@ Thus, with `node[:xtreemfs][:osd][:object_base_directory] = "/var/lib/xtreemfs/o
 
 # Attributes
 
-- `node[:xtreemfs][:user]` - the user to run the xtreemfs services ("xtreemfs")
-- `node[:xtreemfs][:group]` - its group ("xtreemfs")
-- `node[:xtreemfs][:mrc][:dir_service_host]` (defaults to "localhost")
-- `node[:xtreemfs][:osd][:count]` - the number of OSD instances on the host (1)
-- `node[:xtreemfs][:osd][:first_listen_port]` defaults to 32640
-- `node[:xtreemfs][:osd][:first_http_port]` defaults to 30640
-- `node[:xtreemfs][:osd][:bind_ip]`, `node[:xtreemfs][:mrc][:bind_ip]`, `node[:xtreemfs][:dir][:bind_ip]` default to `node[:ipaddress]`
-- `node[:xtreemfs][:osd][:object_base_directory]` - the directory where objects will be stored ("/var/lib/xtreemfs/objs/")
+All attributes are in the `node[:xtreemfs]` "namespace":
+
+- `user` - the user to run the xtreemfs services ("xtreemfs")
+- `group` - its group ("xtreemfs")
+- `mrc/dir_service_host` (defaults to "localhost")
+- `osd/count` - the number of OSD instances on the host (1)
+- `osd/first_listen_port` defaults to 32640
+- `osd/first_http_port` defaults to 30640
+- `osd/object_base_directory` - the directory where objects will be stored ("/var/lib/xtreemfs/objs/")
+- `osd/bind_ip`, `mrc/bind_ip`, `dir/bind_ip` default to `node[:ipaddress]`
+- `mrc/listen_port`, `dir/listen_port`, `mrc/http_port`, `dir/http_port` and `dir/snmp_port` default to their XtreemFS defaults
+- `mrc/replication` and `dir/replication` - if these services use babudb replication - default to `false`
 
 # Recipes
 
