@@ -19,8 +19,6 @@
 
 include_recipe "xtreemfs::default"
 
-package "xtreemfs-server"
-
 if node[:xtreemfs][:mrc][:uuid].nil?
   node.set[:xtreemfs][:mrc][:uuid] = `uuidgen`
 end
@@ -69,4 +67,4 @@ service "xtreemfs-mrc" do
 end
 
 node.set[:xtreemfs][:mrc][:service] = true
-node.save
+#node.save

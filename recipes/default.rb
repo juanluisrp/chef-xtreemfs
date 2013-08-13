@@ -35,3 +35,4 @@ bash "forced apt-get update" do
   code "apt-get update"
 end
 
+package "xtreemfs-server"

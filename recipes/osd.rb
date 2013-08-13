@@ -19,8 +19,6 @@
 
 include_recipe "xtreemfs::default"
 
-package "xtreemfs-server"
-
 dir_service_hosts = get_service_hosts('dir')
 
 0.upto(node[:xtreemfs][:osd][:count]) do |osd_number|
