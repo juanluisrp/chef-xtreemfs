@@ -19,20 +19,13 @@
 
 include_recipe "apt"
 
-key_id = "2FA7E736"
-
-bash "install xtreemfs key" do
-  code "wget -q http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_#{node['lsb']['release']}/Release.key -O - | sudo apt-key add -"
-  not_if "apt-key list | grep #{key_id}"
-end
+include_recipe "chef-solo-search" if Chef::Config[:solo]
 
 apt_repository "xtreemfs" do
   uri "http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_#{node['lsb']['release']}"
+  key "http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_#{node['lsb']['release']}/Release.key"
   distribution "./"
-end
-
-bash "forced apt-get update" do
-  code "apt-get update"
+  action :add
 end
 
 package "xtreemfs-server"
