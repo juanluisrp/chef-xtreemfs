@@ -50,6 +50,7 @@ if node[:xtreemfs][:dir][:replication]
     group node[:xtreemfs][:group]
     variables({
       :service => 'DIR',
+      :repl_port => node[:xtreemfs][:dir][:repl_port],
       :repl_participants => dir_service_hosts,
       :babudb_repl_sync_n => (dir_service_hosts.length/2.0).ceil
     })

@@ -54,6 +54,7 @@ if node[:xtreemfs][:mrc][:replication]
     group node[:xtreemfs][:group]
     variables({
       :service => 'MRC',
+      :repl_port => node[:xtreemfs][:mrc][:repl_port],
       :repl_participants => mrc_repl_participants,
       :babudb_repl_sync_n => (mrc_repl_participants.length/2.0).ceil # TODO do something more clever here
     })

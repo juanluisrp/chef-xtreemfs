@@ -19,6 +19,7 @@ default[:xtreemfs][:mrc][:replication] = false
 default[:xtreemfs][:mrc][:bind_ip] = node[:ipaddress]
 default[:xtreemfs][:mrc][:listen_port] = 32636
 default[:xtreemfs][:mrc][:http_port] = 30636
+default[:xtreemfs][:mrc][:repl_port] = 35676
 
 # DIR defaults
 default[:xtreemfs][:dir][:replication] = false
@@ -26,6 +27,7 @@ default[:xtreemfs][:dir][:bind_ip] = node[:ipaddress]
 default[:xtreemfs][:dir][:listen_port] = 32638
 default[:xtreemfs][:dir][:http_port] = 30638
 default[:xtreemfs][:dir][:snmp_port] = 34638
+default[:xtreemfs][:dir][:repl_port] = 35678
 
 # We don't want to get to fancy with configuration so we use the following convention:
 # "object_base_directory" is configured here and the OSD dirs will be based on the OSD number

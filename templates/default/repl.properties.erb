@@ -10,7 +10,7 @@
 <% i = 0 -%>
 <% @repl_participants.each do |host, port| -%>
 babudb.repl.participant.<%= i %> = <%= host %>
-babudb.repl.participant.<%= i %>.port = <%= port %>
+babudb.repl.participant.<%= i %>.port = <%= @repl_port %>
 <% i+=1; end -%>
 
 # babudb.repl.participant.0 = first-MRC-replica
