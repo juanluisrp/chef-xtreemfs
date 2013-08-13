@@ -1,0 +1,29 @@
+{
+  "id": "x2",
+  "name": "x2",
+  "chef_environment": "_default",
+  "json_class": "Chef::Node",
+  "automatic": {
+    "hostname": "x2",
+    "os": "ubuntu"
+  },
+  "normal": {
+    "xtreemfs": {
+      "mrc": { 
+        "service": true,
+        "listen_port": "32638",
+        "bind_ip": "33.33.33.12"
+      }
+    }
+  },
+  "chef_type": "node",
+  "default": {
+	 "ipaddress": "33.33.33.12"
+  },
+  "override": {
+  },
+  "run_list": [
+    "recipe[xtreemfs::mrc]",
+    "recipe[xtreemfs::osd]"
+  ]
+}

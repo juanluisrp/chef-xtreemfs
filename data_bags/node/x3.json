@@ -1,0 +1,21 @@
+{
+  "id": "x3",
+  "name": "x3",
+  "chef_environment": "_default",
+  "json_class": "Chef::Node",
+  "automatic": {
+    "hostname": "x3",
+    "os": "ubuntu"
+  },
+  "normal": {
+  },
+  "chef_type": "node",
+  "default": {
+	 "ipaddress": "33.33.33.13"
+  },
+  "override": {
+  },
+  "run_list": [
+    "recipe[xtreemfs::osd]"
+  ]
+}
