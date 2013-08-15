@@ -7,6 +7,7 @@ Up to now, only the Ubuntu versions with [repositories perpared here](http://www
 # Requirements
 
 - `apt`
+- for local testing, `chef-solo-search` and `autoetchosts`
 
 # Usage
 
@@ -43,6 +44,15 @@ All attributes are in the `node[:xtreemfs]` "namespace":
 - `xtreemfs::dir`: installs the `xtreemfs-server` package and enables the `xtreemfs-dir` service; sets `node[:xtreemfs][:dir][:service]` to true.
 - `xtreemfs::mrc`: installs the `xtreemfs-server` package, configures and enables the `xtreemfs-mrc` service; searching for the node with `xtreemfs_dir_service:true`.  Finally, sets `node[:xtreemfs][:mrc][:service]` to true. 
 - `xtreemfs::osd`: installs the `xtreemfs-server` package, configures and enables the specified count of OSD instances.  DIR is discovered as in `xtreemfs::mrc`.
+
+# Testing XtreemFS DIR/MRC replication
+
+To test these locally, just spin up the three machines defined in the `Vagrantfile` and the `node` databag:
+
+    vagrant up /x/
+
+Each of these features the DIR and MRC service (both set up to replicate) as well as two OSDs.
+
 
 # License and Author
 
