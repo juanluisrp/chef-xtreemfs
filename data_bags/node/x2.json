@@ -9,9 +9,14 @@
   },
   "normal": {
     "xtreemfs": {
-      "mrc": { 
+      "dir": { 
         "service": true,
         "listen_port": "32638",
+        "bind_ip": "33.33.33.12"
+      },
+      "mrc": { 
+        "service": true,
+        "listen_port": "32636",
         "bind_ip": "33.33.33.12"
       }
     }

@@ -34,14 +34,15 @@ template "/etc/xos/xtreemfs/mrcconfig.properties" do
      :dir_service_hosts => dir_service_hosts,
      :uuid => node[:xtreemfs][:mrc][:uuid],
      :ip_address => node[:xtreemfs][:mrc][:bind_ip],
+     :hostname => node[:fqdn],
      :listen_port => node[:xtreemfs][:mrc][:listen_port],
      :http_port => node[:xtreemfs][:mrc][:http_port],
-     :debug_level => 4, # 0 .. 7 ~ emergency .. debug
-     :babudb_debug_level => 4,
+     :debug_level => 6, # 6 is default
+     :babudb_debug_level => 6,
      :replication => node[:xtreemfs][:mrc][:replication],
      :babudb_sync => node[:xtreemfs][:mrc][:replication] ? 'FDATASYNC' : 'ASYNC'
   })
-  notifies :reload, 'service[xtreemfs-mrc]', :delayed
+  notifies :restart, 'service[xtreemfs-mrc]', :delayed
 end
 
 if node[:xtreemfs][:mrc][:replication]
@@ -58,7 +59,7 @@ if node[:xtreemfs][:mrc][:replication]
       :repl_participants => mrc_repl_participants,
       :babudb_repl_sync_n => (mrc_repl_participants.length/2.0).ceil # TODO do something more clever here
     })
-    notifies :reload, 'service[xtreemfs-mrc]', :delayed
+    notifies :restart, 'service[xtreemfs-mrc]', :delayed
   end
 end
 

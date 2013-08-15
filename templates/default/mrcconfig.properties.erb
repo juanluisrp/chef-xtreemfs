@@ -30,11 +30,12 @@ http_port = <%= @http_port %>
 
 # optional address for network device, "any" if not specified
 # listen.address = 127.0.0.1
+listen.address = <%= @ip_address %>
 
 # optinal host name that is used to register the service at the DIR
 # hostname = foo.bar.com
 
-hostname = <%= @ip_address %>
+<% if @hostname -%>hostname = <%= @hostname %><% end -%>
 
 # interval for querying the Directory Service for new OSDs (in s)
 osd_check_interval = 10

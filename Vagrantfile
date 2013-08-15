@@ -11,16 +11,25 @@ Vagrant.configure("2") do |config|
 
   run_lists = {
     "x1" => [
-              "recipe[xtreemfs::mrc]",
               "recipe[xtreemfs::dir]",
-              "recipe[xtreemfs::osd]"
+              "recipe[xtreemfs::mrc]",
+              "recipe[xtreemfs::osd]",
+              "recipe[autoetchosts]"
             ],
     "x2" => [
               "recipe[xtreemfs::mrc]",
-              "recipe[xtreemfs::osd]"
+              "recipe[xtreemfs::dir]",
+              "recipe[xtreemfs::osd]",
+              "recipe[autoetchosts]"
+
             ],
     "x3" => [
-              "recipe[xtreemfs::osd]"
+              "recipe[xtreemfs::dir]",
+              "recipe[xtreemfs::mrc]",
+              "recipe[xtreemfs::client]",
+              "recipe[xtreemfs::osd]",
+              "recipe[autoetchosts]"
+
             ]
   }
 
@@ -41,7 +50,7 @@ Vagrant.configure("2") do |config|
                 :bind_ip => "33.33.33.#{10+i}"
               },
               :dir => {
-                :replication => false,
+                :replication => true,
                 :bind_ip => "33.33.33.#{10+i}"
               }
             }

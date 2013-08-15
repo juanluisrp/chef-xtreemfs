@@ -33,11 +33,11 @@ template "/etc/xos/xtreemfs/dirconfig.properties" do
      :ip_address => node[:xtreemfs][:dir][:bind_ip],
      :listen_port => node[:xtreemfs][:dir][:listen_port],
      :http_port => node[:xtreemfs][:dir][:http_port],
-     :debug_level => 4, # 0 .. 7 ~ emergency .. debug
-     :babudb_debug_level => 4,
+     :debug_level => 6, # 0 .. 7 ~ emergency .. debug
+     :babudb_debug_level => 6,
      :replication => node[:xtreemfs][:dir][:replication]
   })
-  notifies :reload, 'service[xtreemfs-dir]', :delayed
+  notifies :restart, 'service[xtreemfs-dir]', :delayed
 end
 
 if node[:xtreemfs][:dir][:replication]
@@ -54,7 +54,7 @@ if node[:xtreemfs][:dir][:replication]
       :repl_participants => dir_service_hosts,
       :babudb_repl_sync_n => (dir_service_hosts.length/2.0).ceil
     })
-    notifies :reload, 'service[xtreemfs-dir]', :delayed
+    notifies :restart, 'service[xtreemfs-dir]', :delayed
   end
 end
 
