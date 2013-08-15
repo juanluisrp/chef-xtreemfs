@@ -58,7 +58,25 @@ if node[:xtreemfs][:dir][:replication]
   end
 end
 
+template "/etc/init/xtreemfs-dir.conf" do
+  source "upstart.conf.erb"
+  variables({
+    :descr => 'XtreemFS DIR service',
+    :class => 'org.xtreemfs.dir.DIR',
+    :config => '/etc/xos/xtreemfs/dirconfig.properties',
+    :user => node[:xtreemfs][:user],
+    :group => node[:xtreemfs][:group],
+    :start_on => 'stopped networking',
+    :stop_on => 'deconfiguring-networking'
+  })
+end
+
+link '/etc/init.d/xtreemfs-dir' do
+  to '/lib/init/upstart-job' 
+end
+
 service "xtreemfs-dir" do
+  provider Chef::Provider::Service::Upstart
   action [ :enable, :start ]
 end
 

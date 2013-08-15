@@ -44,26 +44,36 @@ dir_service_hosts = get_service_hosts('dir')
 
   service_file = "/etc/init.d/xtreemfs-osd.#{osd_number}"
   
-  script "create service for OSD #{osd_number}" do
-    interpreter "bash"
-    user "root"
-    cwd "/tmp"
-    code "cp /etc/init.d/xtreemfs-osd #{service_file}"
-
-    not_if { File.exists?(service_file) }
+  template "/etc/init/xtreemfs-osd.#{osd_number}.conf" do
+    source "upstart.conf.erb"
+    variables({
+      :descr => "XtreemFS OSD number #{osd_number}",
+      :class => 'org.xtreemfs.osd.OSD',
+      :config => "/etc/xos/xtreemfs/osdconfig.#{osd_number}.properties",
+      :user => node[:xtreemfs][:user],
+      :group => node[:xtreemfs][:group],
+      :start_on => 'started xtreemfs-osd-all',
+      :stop_on => 'stopped xtreemfs-osd-all'
+    })
   end
 
-  ruby_block "edit #{service_file}" do
-    block do
-      rc = Chef::Util::FileEdit.new(service_file)
-      rc.search_file_replace("CONFIG=/etc/xos/xtreemfs/osdconfig.properties", "CONFIG=/etc/xos/xtreemfs/osdconfig.#{osd_number}.properties")
-      rc.search_file_replace("PID=/var/run/xtreemfs_osd.pid", "PID=/var/run/xtreemfs_osd.#{osd_number}.pid")
-      rc.search_file_replace("LOG=/var/log/xtreemfs/osd.log", "LOG=/var/log/xtreemfs/osd.#{osd_number}.log")
-      rc.write_file
-    end
-  end
-
-  service "xtreemfs-osd.#{osd_number}" do
-    action [ :enable, :start ]
+  link "/etc/init.d/xtreemfs-osd.#{osd_number}" do
+    to '/lib/init/upstart-job' 
   end
 end
+
+template "/etc/init/xtreemfs-osd-all.conf" do
+  source 'xtreemfs-osd-all.conf.erb'
+  variables({
+    :user => node[:xtreemfs][:user],
+    :group => node[:xtreemfs][:group],
+    :start_on => 'stopped networking',
+    :stop_on => 'deconfiguring-networking'
+  })
+end
+
+service "xtreemfs-osd-all" do
+  provider Chef::Provider::Service::Upstart
+  action [ :enable, :start ]
+end
+

@@ -57,14 +57,31 @@ if node[:xtreemfs][:mrc][:replication]
       :service => 'MRC',
       :repl_port => node[:xtreemfs][:mrc][:repl_port],
       :repl_participants => mrc_repl_participants,
-      :babudb_repl_sync_n => (mrc_repl_participants.length/2.0).ceil # TODO do something more clever here
+      :babudb_repl_sync_n => (mrc_repl_participants.length/2.0).ceil # TODO do something cleverer here
     })
     notifies :restart, 'service[xtreemfs-mrc]', :delayed
   end
 end
 
+template "/etc/init/xtreemfs-mrc.conf" do
+  source "upstart.conf.erb"
+  variables({
+    :descr => 'XtreemFS MRC service',
+    :class => 'org.xtreemfs.mrc.MRC',
+    :config => '/etc/xos/xtreemfs/mrcconfig.properties',
+    :user => node[:xtreemfs][:user],
+    :group => node[:xtreemfs][:group],
+    :start_on => 'started xtreemfs-dir',
+    :stop_on => 'deconfiguring-networking'
+  })
+end
+
+link '/etc/init.d/xtreemfs-mrc' do
+  to '/lib/init/upstart-job' 
+end
 
 service "xtreemfs-mrc" do
+  provider Chef::Provider::Service::Upstart
   action [ :enable, :start ]
 end
 
