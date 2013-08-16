@@ -57,6 +57,10 @@ dir_service_hosts = get_service_hosts('dir')
     })
   end
 
+  link "/var/log/xtreemfs/osd.#{osd_number}.log" do
+    to "/var/log/upstart/xtreemfs-osd.#{osd_number}.log"
+  end
+
   link "/etc/init.d/xtreemfs-osd.#{osd_number}" do
     to '/lib/init/upstart-job' 
   end

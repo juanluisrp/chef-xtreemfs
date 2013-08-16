@@ -75,6 +75,10 @@ link '/etc/init.d/xtreemfs-dir' do
   to '/lib/init/upstart-job' 
 end
 
+link '/var/log/xtreemfs/dir.log' do
+  to '/var/log/upstart/xtreemfs-dir.log'
+end
+
 service "xtreemfs-dir" do
   provider Chef::Provider::Service::Upstart
   action [ :enable, :start ]

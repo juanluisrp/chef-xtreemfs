@@ -80,6 +80,10 @@ link '/etc/init.d/xtreemfs-mrc' do
   to '/lib/init/upstart-job' 
 end
 
+link '/var/log/xtreemfs/mrc.log' do
+  to '/var/log/upstart/xtreemfs-mrc.log'
+end
+
 service "xtreemfs-mrc" do
   provider Chef::Provider::Service::Upstart
   action [ :enable, :start ]
