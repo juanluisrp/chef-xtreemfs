@@ -1,7 +1,13 @@
 default[:xtreemfs][:standalone] = Chef::Config[:solo]
 default[:xtreemfs][:user] = "xtreemfs"
 default[:xtreemfs][:group] = "xtreemfs"
+default[:xtreemfs][:use_hostnames] = true
 
+default[:xtreemfs][:repo] = {
+  :uri => "http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_#{node['lsb']['release']}",
+  :key => "http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_#{node['lsb']['release']}/Release.key",
+  :distribution => './'
+}
 # MRC defaults
 
 default[:xtreemfs][:mrc][:dir_service_host] = "localhost"

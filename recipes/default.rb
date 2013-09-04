@@ -22,10 +22,12 @@ include_recipe "apt"
 include_recipe "chef-solo-search" if Chef::Config[:solo]
 
 apt_repository "xtreemfs" do
-  uri "http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_#{node['lsb']['release']}"
-  key "http://download.opensuse.org/repositories/home:/xtreemfs/xUbuntu_#{node['lsb']['release']}/Release.key"
-  distribution "./"
+  uri node[:xtreemfs][:repo][:uri]
+  key node[:xtreemfs][:repo][:key]
+  distribution node[:xtreemfs][:repo][:distribution]
   action :add
 end
 
-package "xtreemfs-server"
+package "xtreemfs-server" do
+  action :upgrade
+end
