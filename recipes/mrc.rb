@@ -19,6 +19,10 @@
 
 include_recipe "xtreemfs::default"
 
+package "xtreemfs-server" do
+  action :upgrade
+end
+
 if node[:xtreemfs][:mrc][:uuid].nil?
   node.set[:xtreemfs][:mrc][:uuid] = `uuidgen`
 end
@@ -34,7 +38,7 @@ template "/etc/xos/xtreemfs/mrcconfig.properties" do
      :dir_service_hosts => dir_service_hosts,
      :uuid => node[:xtreemfs][:mrc][:uuid],
      :ip_address => node[:xtreemfs][:mrc][:bind_ip],
-     :hostname => node[:fqdn],
+     :hostname => node[:xtreemfs][:use_hostnames] ? node[:fqdn] : nil,
      :listen_port => node[:xtreemfs][:mrc][:listen_port],
      :http_port => node[:xtreemfs][:mrc][:http_port],
      :debug_level => 6, # 6 is default

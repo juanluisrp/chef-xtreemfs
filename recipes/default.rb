@@ -27,7 +27,3 @@ apt_repository "xtreemfs" do
   distribution node[:xtreemfs][:repo][:distribution]
   action :add
 end
-
-package "xtreemfs-server" do
-  action :upgrade
-end

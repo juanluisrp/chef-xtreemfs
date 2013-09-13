@@ -19,6 +19,10 @@
 
 include_recipe "xtreemfs::default"
 
+package "xtreemfs-server" do
+  action :upgrade
+end
+
 if node[:xtreemfs][:dir][:uuid].nil?
   node.set[:xtreemfs][:dir][:uuid] = `uuidgen`
 end

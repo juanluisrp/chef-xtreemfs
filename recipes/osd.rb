@@ -19,6 +19,10 @@
 
 include_recipe "xtreemfs::default"
 
+package "xtreemfs-server" do
+  action :upgrade
+end
+
 dir_service_hosts = get_service_hosts('dir')
 
 0.upto(node[:xtreemfs][:osd][:count]) do |osd_number|
@@ -27,7 +31,6 @@ dir_service_hosts = get_service_hosts('dir')
     if node[:xtreemfs][:osd][osd_id].nil?
       node.set[:xtreemfs][:osd][osd_id] = `uuidgen`
     end
-    
     source "osdconfig.properties.erb"
     mode 0440
     owner node[:xtreemfs][:user]
@@ -40,10 +43,9 @@ dir_service_hosts = get_service_hosts('dir')
       :uuid => node[:xtreemfs][:osd][osd_id],
       :listen_address => node[:xtreemfs][:osd][:bind_ip]
     })
+    notifies :restart, "service[xtreemfs-osd.#{osd_number}]", :delayed
   end
 
-  service_file = "/etc/init.d/xtreemfs-osd.#{osd_number}"
-  
   template "/etc/init/xtreemfs-osd.#{osd_number}.conf" do
     source "upstart.conf.erb"
     variables({
@@ -57,6 +59,11 @@ dir_service_hosts = get_service_hosts('dir')
     })
   end
 
+  service "xtreemfs-osd.#{osd_number}" do
+    provider Chef::Provider::Service::Upstart
+    action [ :enable, :start ]
+  end
+    
   link "/var/log/xtreemfs/osd.#{osd_number}.log" do
     to "/var/log/upstart/xtreemfs-osd.#{osd_number}.log"
   end
@@ -78,6 +85,6 @@ end
 
 service "xtreemfs-osd-all" do
   provider Chef::Provider::Service::Upstart
-  action [ :enable, :start ]
+  action :enable
 end
 

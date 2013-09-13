@@ -19,4 +19,6 @@
 
 include_recipe "xtreemfs::default"
 
-package "xtreemfs-client"
+package "xtreemfs-client" do
+  action :upgrade
+end
