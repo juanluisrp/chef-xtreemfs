@@ -43,7 +43,7 @@ dir_service_hosts = get_service_hosts('dir')
       :uuid => node[:xtreemfs][:osd][osd_id],
       :listen_address => node[:xtreemfs][:osd][:bind_ip]
     })
-    notifies :restart, "service[xtreemfs-osd.#{osd_number}]", :delayed
+    notifies :restart, "service[xtreemfs-osd.#{osd_number}]", :immediately
   end
 
   template "/etc/init/xtreemfs-osd.#{osd_number}.conf" do

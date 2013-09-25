@@ -63,7 +63,7 @@ if node[:xtreemfs][:mrc][:replication]
       :repl_participants => mrc_repl_participants,
       :babudb_repl_sync_n => (mrc_repl_participants.length/2.0).ceil # TODO do something cleverer here
     })
-    notifies :restart, 'service[xtreemfs-mrc]', :delayed
+    notifies :restart, 'service[xtreemfs-mrc]', :immediately
   end
 end
 

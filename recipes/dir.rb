@@ -58,7 +58,7 @@ if node[:xtreemfs][:dir][:replication]
       :repl_participants => dir_service_hosts,
       :babudb_repl_sync_n => (dir_service_hosts.length/2.0).ceil
     })
-    notifies :restart, 'service[xtreemfs-dir]', :delayed
+    notifies :restart, 'service[xtreemfs-dir]', :immediately
   end
 end
 
