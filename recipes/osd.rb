@@ -63,7 +63,20 @@ dir_service_hosts = get_service_hosts('dir')
     provider Chef::Provider::Service::Upstart
     action [ :enable, :start ]
   end
-    
+
+  ruby_block "block_until_xtreemfs_osd.#{osd_number}_is_up" do
+    block do
+      osd_port = node[:xtreemfs][:osd][:first_listen_port] + osd_number
+      until IO.popen("netstat -lnt").entries.select { |entry|
+          entry.split[3] =~ /:#{osd_port}$/
+        }.size == 1
+        Chef::Log.debug "service[xtreemfs-osd] not listening on port #{osd_port}"
+        sleep 1
+      end
+    end
+    action :create
+  end
+
   link "/var/log/xtreemfs/osd.#{osd_number}.log" do
     to "/var/log/upstart/xtreemfs-osd.#{osd_number}.log"
   end

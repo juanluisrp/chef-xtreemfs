@@ -88,5 +88,17 @@ service "xtreemfs-dir" do
   action [ :enable, :start ]
 end
 
+ruby_block "block_until_xtreemfs_dir_is_up" do
+  block do
+    until IO.popen("netstat -lnt").entries.select { |entry|
+        entry.split[3] =~ /:#{node[:xtreemfs][:dir][:listen_port]}$/
+      }.size == 1
+      Chef::Log.debug "service[xtreemfs-dir] not listening on port #{node[:xtreemfs][:dir][:listen_port]}"
+      sleep 1
+    end
+  end
+  action :create
+end
+
 node.set[:xtreemfs][:dir][:service] = true
 #node.save
